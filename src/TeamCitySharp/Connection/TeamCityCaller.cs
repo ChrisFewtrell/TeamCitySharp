@@ -247,13 +247,18 @@ namespace TeamCitySharp.Connection
         {
             var httpClient = new HttpClient(new TeamcityJsonEncoderDecoderConfiguration());
             httpClient.Request.Accept = accept;
-            if (!_configuration.ActAsGuest)
+            if (UseBasicAuthentication())
             {
                 httpClient.Request.SetBasicAuthentication(userName, password);
                 httpClient.Request.ForceBasicAuth = true;
             }
 
             return httpClient;
+        }
+
+        private bool UseBasicAuthentication()
+        {
+            return !_configuration.ActAsGuest && !string.IsNullOrEmpty(_configuration.UserName);
         }
 
         // only used by the artifact listing methods since i havent found a way to deserialize them into a domain entity
@@ -279,7 +284,8 @@ namespace TeamCitySharp.Connection
 
         private bool CheckForUserNameAndPassword()
         {
-            return !_configuration.ActAsGuest && string.IsNullOrEmpty(_configuration.UserName) && string.IsNullOrEmpty(_configuration.Password);
+            return false;
+            //return !_configuration.ActAsGuest && string.IsNullOrEmpty(_configuration.UserName) && string.IsNullOrEmpty(_configuration.Password);
         }
 
         private string GetContentType(string data)
