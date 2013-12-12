@@ -17,11 +17,10 @@ namespace TeamCitySharp.DomainEntities
         public BuildConfig BuildConfig { get; set; }
         public Agent Agent { get; set;}
         public ChangeWrapper Changes { get; set; }
-
+        public RevisionWrapper Revisions { get; set; }
         public override string ToString()
         {
             return Number;
         }
-        
     }
 }
